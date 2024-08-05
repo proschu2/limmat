@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCPtPmp2jZscA2bBY4puzgHCi6Ht2nXeno</string>
+	<key>GCM_SENDER_ID</key>
+	<string>480289567495</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>ch.limmat.app</string>
+	<key>PROJECT_ID</key>
+	<string>limmat-boeoettle-guide</string>
+	<key>STORAGE_BUCKET</key>
+	<string>limmat-boeoettle-guide.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:480289567495:ios:101e07bbd4c436a5a54ba2</string>
+</dict>
+</plist>

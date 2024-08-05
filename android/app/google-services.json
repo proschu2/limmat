@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "480289567495",
+    "project_id": "limmat-boeoettle-guide",
+    "storage_bucket": "limmat-boeoettle-guide.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480289567495:android:02ca8b2423eb937aa54ba2",
+        "android_client_info": {
+          "package_name": "ch.limmat.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyeXgF0L5H-gGWIuNx43KcokgqCk9x4cw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

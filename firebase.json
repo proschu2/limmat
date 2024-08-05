@@ -1,0 +1,71 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "limmat-boeoettle-guide",
+          "appId": "1:480289567495:android:02ca8b2423eb937aa54ba2",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "limmat-boeoettle-guide",
+          "configurations": {
+            "android": "1:480289567495:android:02ca8b2423eb937aa54ba2",
+            "ios": "1:480289567495:ios:101e07bbd4c436a5a54ba2",
+            "macos": "1:480289567495:ios:101e07bbd4c436a5a54ba2",
+            "web": "1:480289567495:web:7ab936b426159b76a54ba2"
+          }
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "limmat-boeoettle-guide",
+          "appId": "1:480289567495:ios:101e07bbd4c436a5a54ba2",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "limmat-boeoettle-guide",
+          "appId": "1:480289567495:ios:101e07bbd4c436a5a54ba2",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
