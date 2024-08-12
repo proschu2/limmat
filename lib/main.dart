@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:limmat/widgets/main_view.dart';
 import 'firebase_options.dart';
-import 'package:limmat/widgets/water_data_display.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -31,11 +31,6 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Colors.amber,
-          unselectedItemColor: Colors.blue,
-          backgroundColor: Colors.transparent,
-        ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(
               color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
@@ -48,7 +43,7 @@ class MyApp extends StatelessWidget {
               color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const WaterDataDisplay(title: 'LBG'),
+      home: MainView(),
     );
   }
 }

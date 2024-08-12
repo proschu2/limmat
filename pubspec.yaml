@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+3
 
 environment:
   sdk: ">=3.4.4 <4.0.0"
@@ -35,11 +35,16 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   http: ^1.2.2
-  json_annotation: ^4.9.0
-  firebase_core: ^2.24.2
+  firebase_core: ^3.3.0
   intl: ^0.19.0
-  cloud_firestore: ^4.14.0
+  cloud_firestore: ^5.0.0
   flutter_native_splash: ^2.4.1
+  weather_icons: ^3.0.0
+  syncfusion_flutter_charts:
+    git:
+      url: https://github.com/Luvti/flutter-widgets
+      path: packages/syncfusion_flutter_charts
+      ref: 15e3c4a95e3cf2e2393755bf5aa11c0206ed6dea
 
 dev_dependencies:
   flutter_test:
@@ -50,8 +55,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
-  json_serializable: ^6.8.0
-  build_runner: ^2.4.11
   flutter_launcher_icons: ^0.13.1
 
 # For information on the generic Dart part of this file, see the

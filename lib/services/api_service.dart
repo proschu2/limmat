@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import '../models/water_data.dart';
 
 class ApiService {
   final String waterHeightUrl =
@@ -11,6 +12,9 @@ class ApiService {
       'https://www.hydrodaten.admin.ch/plots/p_q_7days/2099_p_q_7days_en.json';
   final String waterTemperatureUrl =
       'https://www.hydrodaten.admin.ch/plots/temperature_7days/2243_temperature_7days_en.json';
+
+  final String weatherForecastUrl =
+      'https://api.open-meteo.com/v1/forecast?latitude=47.392574&longitude=8.520825&current=temperature_2m,weather_code&daily=weather_code';
 
   Future<dynamic> fetchUrl(String url) async {
     try {
@@ -32,9 +36,10 @@ class ApiService {
     final correctLists =
         data.firstWhere((element) => element['name'] == 'Median');
     final List<String> dates = List<String>.from(correctLists['x']);
-    final List<double> values =
-        List<double>.from(correctLists['y'].map((item) => item.toDouble()));
-    final Map<String, num> averages = averageValuesByDate(dates, values);
+    final List<double> values = List<double>.from(
+        correctLists['y'].map((item) => (item.toDouble() - 400.35)));
+    final Map<String, num> averages =
+        averageValuesByDate(dates, values, round: false);
     return averages;
   }
 
@@ -46,7 +51,8 @@ class ApiService {
     final List<String> dates = List<String>.from(correctLists['x']);
     final List<int> values = List<int>.from(
         correctLists['y'].map((item) => item.toDouble().round()));
-    final Map<String, num> averages = averageValuesByDate(dates, values);
+    final Map<String, num> averages =
+        averageValuesByDate(dates, values, round: true);
     return averages;
   }
 
@@ -61,11 +67,12 @@ class ApiService {
 
     final waterHeightData =
         data.firstWhere((element) => element['name'] == 'Water level');
-    final List<int> waterHeightValues = List<int>.from(
-        waterHeightData['y'].map((item) => item.toDouble().round()));
-    final int waterHeight = waterHeightValues.last;
+    final List<double> waterHeightValues = List<double>.from(
+        waterHeightData['y']
+            .map((item) => ((item.toDouble() - 400.35) * 100).round() / 100));
+    final double waterHeight = waterHeightValues.last;
 
-    return {'waterSpeed': waterSpeed, 'waterHeight': waterHeight};
+    return {'waterHeight': waterHeight, 'waterSpeed': waterSpeed};
   }
 
   Future<double> fetchWaterTemperature() async {
@@ -74,13 +81,78 @@ class ApiService {
     return double.parse(data.first['y'].last.toStringAsFixed(1));
   }
 
-  Future<Map<String, num>> fetchWaterData() async {
+  Future<WaterData> fetchWaterData() async {
     final waterStatus = await fetchWaterStatus();
     final waterTemperature = await fetchWaterTemperature();
-    return {'waterTemperature': waterTemperature, ...waterStatus};
+
+    final weatherResponse = await fetchUrl(weatherForecastUrl);
+    final num currentTemperature = weatherResponse['current']['temperature_2m'];
+    final num currentWeatherCode = weatherResponse['current']['weather_code'];
+    return WaterData(
+        waterHeight: waterStatus['waterHeight'] ?? 0,
+        waterSpeed: waterStatus['waterSpeed'] ?? 0,
+        waterTemperature: waterTemperature,
+        weatherCode: currentWeatherCode,
+        outsideTemperature: currentTemperature);
   }
 
-  Map<String, num> averageValuesByDate(List<String> dates, List<num> values) {
+  Future<Map<String, WaterData>> fetchHistoricalWaterData() async {
+    final waterHeight = await fetchWaterHeight();
+    final waterSpeed = await fetchWaterSpeed();
+    final double waterTemperature = await fetchWaterTemperature();
+
+    Map<String, WaterData> waterData = {};
+
+    for (int i = 0; i < waterHeight.length; i++) {
+      String date = waterHeight.keys.elementAt(i);
+      waterData[date] = WaterData(
+          waterHeight: waterHeight.values.elementAt(i),
+          waterSpeed: waterSpeed.values.elementAt(i),
+          waterTemperature: waterTemperature);
+    }
+
+    return waterData;
+  }
+
+  Future<Map<String, int>> fetchWeatherForecastData() async {
+    final response = await fetchUrl(weatherForecastUrl);
+    final Map<String, dynamic> forecasts = response['daily'];
+    final List<String> dates = List<String>.from(forecasts['time'] ?? []);
+    final List<int> weatherCodes =
+        List<int>.from(forecasts['weather_code'] ?? []);
+    Map<String, int> weatherForecastData = {};
+    for (int i = 0; i < dates.length; i++) {
+      String date = dates[i];
+      int weatherCode = weatherCodes[i];
+      weatherForecastData[date] = weatherCode;
+    }
+    return weatherForecastData;
+  }
+
+  Future<ForecastedWaterData> fetchForecastedWaterData() async {
+    final waterHeight = await fetchWaterHeight();
+    final waterSpeed = await fetchWaterSpeed();
+    final double waterTemperature = await fetchWaterTemperature();
+    final weatherCodes = await fetchWeatherForecastData();
+
+    Map<String, WaterData> forecastData = {};
+
+    for (int i = 0; i < waterHeight.length; i++) {
+      String date = waterHeight.keys.elementAt(i);
+      forecastData[date] = WaterData(
+          waterHeight: waterHeight.values.elementAt(i),
+          waterSpeed: waterSpeed.values.elementAt(i),
+          waterTemperature: waterTemperature);
+      if (weatherCodes.containsKey(date)) {
+        forecastData[date]!.weatherCode = weatherCodes[date]!;
+      }
+    }
+
+    return ForecastedWaterData(forecastData: forecastData);
+  }
+
+  Map<String, num> averageValuesByDate(List<String> dates, List<num> values,
+      {bool round = true}) {
     // Initialize a Map to store the sum of values and the count of occurrences for each date
     Map<String, List<num>> dateToValuesMap = {};
 
@@ -106,7 +178,8 @@ class ApiService {
     dateToValuesMap.forEach((date, sumAndCount) {
       num sum = sumAndCount[0];
       int count = sumAndCount[1].toInt();
-      averageValues[date] = (sum / count).round();
+      averageValues[date] =
+          round ? (sum / count).round() : ((sum / count) * 100).round() / 100;
     });
 
     var sortedEntries = averageValues.entries.toList()
@@ -120,5 +193,5 @@ class ApiService {
 void main() async {
   ApiService apiService = ApiService();
 
-  print(await apiService.fetchWaterData());
+  print(await apiService.fetchForecastedWaterData());
 }
