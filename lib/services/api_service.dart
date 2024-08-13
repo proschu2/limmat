@@ -2,28 +2,51 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../models/water_data.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+const String waterHeightUrl =
+    'https://www.hydrodaten.admin.ch/plots/p_forecast/2099_p_forecast_de.json';
+const String waterSpeedUrl =
+    'https://www.hydrodaten.admin.ch/plots/q_forecast/2099_q_forecast_de.json';
+const String waterStatusUrl =
+    'https://www.hydrodaten.admin.ch/plots/p_q_7days/2099_p_q_7days_en.json';
+const String waterTemperatureUrl =
+    'https://www.hydrodaten.admin.ch/plots/temperature_7days/2243_temperature_7days_en.json';
+
+const String weatherForecastUrl =
+    'https://api.open-meteo.com/v1/forecast?latitude=47.392574&longitude=8.520825&current=temperature_2m,weather_code&daily=weather_code';
 
 class ApiService {
-  final String waterHeightUrl =
-      'https://www.hydrodaten.admin.ch/plots/p_forecast/2099_p_forecast_de.json';
-  final String waterSpeedUrl =
-      'https://www.hydrodaten.admin.ch/plots/q_forecast/2099_q_forecast_de.json';
-  final String waterStatusUrl =
-      'https://www.hydrodaten.admin.ch/plots/p_q_7days/2099_p_q_7days_en.json';
-  final String waterTemperatureUrl =
-      'https://www.hydrodaten.admin.ch/plots/temperature_7days/2243_temperature_7days_en.json';
+  final functions = FirebaseFunctions.instance;
 
-  final String weatherForecastUrl =
-      'https://api.open-meteo.com/v1/forecast?latitude=47.392574&longitude=8.520825&current=temperature_2m,weather_code&daily=weather_code';
+  final Map<String, Map<String, String>> neededUrls = {
+    'waterHeight': {'url': waterHeightUrl, 'function': 'waterHeightRequest'},
+    'waterSpeed': {'url': waterSpeedUrl, 'function': 'waterSpeedRequest'},
+    'waterStatus': {'url': waterStatusUrl, 'function': 'waterStatusRequest'},
+    'waterTemperature': {
+      'url': waterTemperatureUrl,
+      'function': 'waterTemperatureRequest'
+    },
+    'weatherForecast': {
+      'url': weatherForecastUrl,
+      'function': 'weatherForecastRequest'
+    }
+  };
 
   Future<dynamic> fetchUrl(String url) async {
     try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+      if (kIsWeb) {
+        final result = await functions.httpsCallable(url).call();
+        return jsonDecode(result.data as String);
       } else {
-        print(response.statusCode);
-        throw Exception('Failed to load data from API');
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) {
+          return jsonDecode(response.body);
+        } else {
+          print(response.statusCode);
+          throw Exception('Failed to load data from API');
+        }
       }
     } catch (e) {
       throw Exception('Failed to load data from API: $e');
@@ -31,7 +54,7 @@ class ApiService {
   }
 
   Future<dynamic> fetchWaterHeight() async {
-    final response = await fetchUrl(waterHeightUrl);
+    final response = await fetchUrl('waterHeight');
     final data = response['plot']['data'];
     final correctLists =
         data.firstWhere((element) => element['name'] == 'Median');
@@ -44,7 +67,7 @@ class ApiService {
   }
 
   Future<Map<String, num>> fetchWaterSpeed() async {
-    final response = await fetchUrl(waterSpeedUrl);
+    final response = await fetchUrl('waterSpeed');
     final data = response['plot']['data'];
     final correctLists =
         data.firstWhere((element) => element['name'] == 'Median');
@@ -57,7 +80,7 @@ class ApiService {
   }
 
   Future<Map<String, num>> fetchWaterStatus() async {
-    final response = await fetchUrl(waterStatusUrl);
+    final response = await fetchUrl('waterStatus');
     final data = response['plot']['data'];
     final waterSpeedData =
         data.firstWhere((element) => element['name'] == 'Discharge');
@@ -76,7 +99,7 @@ class ApiService {
   }
 
   Future<double> fetchWaterTemperature() async {
-    final response = await fetchUrl(waterTemperatureUrl);
+    final response = await fetchUrl('waterTemperature');
     final data = response['plot']['data'];
     return double.parse(data.first['y'].last.toStringAsFixed(1));
   }
@@ -85,7 +108,7 @@ class ApiService {
     final waterStatus = await fetchWaterStatus();
     final waterTemperature = await fetchWaterTemperature();
 
-    final weatherResponse = await fetchUrl(weatherForecastUrl);
+    final weatherResponse = await fetchUrl('weatherForecast');
     final num currentTemperature = weatherResponse['current']['temperature_2m'];
     final num currentWeatherCode = weatherResponse['current']['weather_code'];
     return WaterData(
@@ -115,7 +138,7 @@ class ApiService {
   }
 
   Future<Map<String, int>> fetchWeatherForecastData() async {
-    final response = await fetchUrl(weatherForecastUrl);
+    final response = await fetchUrl('weatherForecast');
     final Map<String, dynamic> forecasts = response['daily'];
     final List<String> dates = List<String>.from(forecasts['time'] ?? []);
     final List<int> weatherCodes =
@@ -188,10 +211,4 @@ class ApiService {
 
     return sortedAverageValues;
   }
-}
-
-void main() async {
-  ApiService apiService = ApiService();
-
-  print(await apiService.fetchForecastedWaterData());
 }
