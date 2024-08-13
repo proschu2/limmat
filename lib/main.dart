@@ -8,12 +8,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   if (kIsWeb) {
+    await dotenv.load(isOptional: true);
     final String recaptchaSiteKey = dotenv.env['RECAPTCHA_SITE_KEY'] ?? '';
-    print('Using reCAPTCHA v3 site key: $recaptchaSiteKey');
 
     if (recaptchaSiteKey.isNotEmpty) {
       await FirebaseAppCheck.instance.activate(
@@ -21,7 +22,6 @@ void main() async {
       );
     }
   } else {
-    print('No Web');
     await FirebaseAppCheck.instance
         .activate(androidProvider: AndroidProvider.playIntegrity);
   }
