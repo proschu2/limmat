@@ -8,22 +8,29 @@ const createProxyFunction = (apiUrl: string) => {
     corsHandler(request, response, async () => {
       try {
         const fetchOptions: any = {
-          method: request.method,
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             // Add any other headers you need
           },
         };
-        if (
+        /* if (
           request.body &&
           request.method !== "GET" &&
           request.method !== "HEAD"
         ) {
           fetchOptions.body = JSON.stringify(request.body);
-        }
+        } */
         const apiResponse = await fetch(apiUrl, fetchOptions);
-
         const data = await apiResponse.json();
+        // Set CORS headers
+        response.set("Access-Control-Allow-Origin", "*");
+        response.set(
+          "Access-Control-Allow-Methods",
+          "GET, POST, PUT, DELETE, OPTIONS"
+        );
+        response.set("Access-Control-Allow-Headers", "Content-Type");
+
         response.status(apiResponse.status).send(data);
       } catch (error) {
         logger.error("Error making API request", error);

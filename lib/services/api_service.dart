@@ -37,7 +37,11 @@ class ApiService {
   Future<dynamic> fetchUrl(String url) async {
     try {
       if (kIsWeb) {
-        final result = await functions.httpsCallable(url).call();
+        final result = await functions
+            .httpsCallable(
+              neededUrls[url]!['function']!,
+            )
+            .call();
         return jsonDecode(result.data as String);
       } else {
         final response = await http.get(Uri.parse(url));
