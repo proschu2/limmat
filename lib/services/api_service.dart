@@ -42,9 +42,9 @@ class ApiService {
               neededUrls[url]!['function']!,
             )
             .call();
-        return jsonDecode(result.data as String);
+        return result.data;
       } else {
-        final response = await http.get(Uri.parse(url));
+        final response = await http.get(Uri.parse(neededUrls[url]!['url']!));
         if (response.statusCode == 200) {
           return jsonDecode(response.body);
         } else {
@@ -53,6 +53,7 @@ class ApiService {
         }
       }
     } catch (e) {
+      print(e);
       throw Exception('Failed to load data from API: $e');
     }
   }

@@ -1,42 +1,32 @@
-import {onRequest} from "firebase-functions/v2/https";
+import {onCall, CallableRequest} from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
-import cors from "cors";
-const corsHandler = cors({origin: true});
 import fetch = require("node-fetch");
 const createProxyFunction = (apiUrl: string) => {
-  return onRequest((request, response) => {
-    corsHandler(request, response, async () => {
-      try {
-        const fetchOptions: any = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Add any other headers you need
-          },
-        };
-        /* if (
+  return onCall(async (request: CallableRequest<any>) => {
+    try {
+      const fetchOptions: any = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any other headers you need
+        },
+      };
+      /* if (
           request.body &&
           request.method !== "GET" &&
           request.method !== "HEAD"
         ) {
           fetchOptions.body = JSON.stringify(request.body);
         } */
-        const apiResponse = await fetch(apiUrl, fetchOptions);
-        const data = await apiResponse.json();
-        // Set CORS headers
-        response.set("Access-Control-Allow-Origin", "*");
-        response.set(
-          "Access-Control-Allow-Methods",
-          "GET, POST, PUT, DELETE, OPTIONS"
-        );
-        response.set("Access-Control-Allow-Headers", "Content-Type");
-
-        response.status(apiResponse.status).send(data);
-      } catch (error) {
-        logger.error("Error making API request", error);
-        response.status(500).send((error as Error).toString());
-      }
-    });
+      const apiResponse = await fetch(apiUrl, fetchOptions);
+      const responseData = await apiResponse.json();
+      return responseData;
+    } catch (error) {
+      logger.error("Error making API request", error);
+      return {
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
   });
 };
 
