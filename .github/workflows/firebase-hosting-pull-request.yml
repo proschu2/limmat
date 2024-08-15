@@ -28,6 +28,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Print environment variables
+        run: |
+          echo "RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }}"
+          echo "FIREBASE_SERVICE_ACCOUNT_LIMMAT_BOEOETTLE_GUIDE=${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIMMAT_BOEOETTLE_GUIDE }}"
+
       - name: Build web
         env:
           RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}

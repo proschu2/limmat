@@ -22,8 +22,6 @@ class DefaultFirebaseOptions {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
-      case TargetPlatform.iOS:
-        return ios;
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
@@ -69,14 +67,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'limmat-boeoettle-guide.appspot.com',
     iosBundleId: 'ch.limmat.app',
   );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCPtPmp2jZscA2bBY4puzgHCi6Ht2nXeno',
-    appId: '1:480289567495:ios:101e07bbd4c436a5a54ba2',
-    messagingSenderId: '480289567495',
-    projectId: 'limmat-boeoettle-guide',
-    storageBucket: 'limmat-boeoettle-guide.appspot.com',
-    iosBundleId: 'ch.limmat.app',
-  );
-
 }
