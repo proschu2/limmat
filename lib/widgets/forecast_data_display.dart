@@ -20,8 +20,10 @@ class _ForecastViewState extends State<ForecastView> {
 
   @override
   void initState() {
-    super.initState();
-    loadData();
+    if (mounted) {
+      super.initState();
+      loadData();
+    }
   }
 
   Future<void> fetchData() async {
@@ -30,8 +32,9 @@ class _ForecastViewState extends State<ForecastView> {
     setState(() {
       forecastedWaterData = data;
     });
-
-    await _firestoreService.saveForecastData(data);
+    print('saving forecast data');
+    _firestoreService.saveForecastData(data);
+    print('forecast data saved');
   }
 
   Future<void> loadData() async {
@@ -61,7 +64,7 @@ class _ForecastViewState extends State<ForecastView> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Center(
-                                child: Container(
+                                child: SizedBox(
                               height: 300,
                               child: ForecastLineChart(
                                   forecastData:
@@ -69,7 +72,7 @@ class _ForecastViewState extends State<ForecastView> {
                             )),
                             const SizedBox(height: 20),
                             Center(
-                                child: Container(
+                                child: SizedBox(
                               height: 350,
                               child: ForecastDataTable(
                                   forecastData:

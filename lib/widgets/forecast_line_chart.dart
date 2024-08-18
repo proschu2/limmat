@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class ForecastLineChart extends StatelessWidget {
   final Map<String, WaterData> forecastData;
 
-  ForecastLineChart({required this.forecastData});
+  const ForecastLineChart({super.key, required this.forecastData});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +15,15 @@ class ForecastLineChart extends StatelessWidget {
     final List<ChartData> speedSpots = forecastData.entries
         .map((entry) => ChartData(
             outputFormat.format(inputFormat.parse(entry.key)),
-            entry.value.waterSpeed!))
+            entry.value.waterSpeed))
         .toList();
     final List<ChartData> heightSpots = forecastData.entries
         .map((entry) => ChartData(
             outputFormat.format(inputFormat.parse(entry.key)),
-            entry.value.waterHeight!))
+            entry.value.waterHeight))
         .toList();
 
-    return Container(
+    return SizedBox(
         width: 600,
         child: SfCartesianChart(
           primaryXAxis: const CategoryAxis(
@@ -64,7 +64,7 @@ class ForecastLineChart extends StatelessWidget {
               color: Colors.lime,
               width: 2,
               legendItemText: 'Speed',
-              dashArray: [2, 2],
+              dashArray: const [2, 2],
             ),
             SplineSeries<ChartData, String>(
               dataSource: heightSpots,
@@ -74,7 +74,7 @@ class ForecastLineChart extends StatelessWidget {
               color: Colors.amberAccent,
               width: 2,
               yAxisName: 'Height',
-              dashArray: [5, 5],
+              dashArray: const [5, 5],
             ),
           ],
           tooltipBehavior: TooltipBehavior(enable: true),
@@ -82,18 +82,18 @@ class ForecastLineChart extends StatelessWidget {
             lineColor: Colors.white,
             enable: true,
             activationMode: ActivationMode.singleTap,
-            tooltipSettings: InteractiveTooltip(
+            tooltipSettings: const InteractiveTooltip(
               enable: true,
               color: Colors.black,
               borderWidth: 1,
               borderColor: Colors.white,
             ),
-            markerSettings: TrackballMarkerSettings(
+            markerSettings: const TrackballMarkerSettings(
               markerVisibility: TrackballVisibilityMode.visible,
               width: 8,
               height: 8,
               borderWidth: 2,
-              borderColor: const Color.fromARGB(255, 206, 152, 152),
+              borderColor: Color.fromARGB(255, 206, 152, 152),
             ),
             lineType: TrackballLineType.vertical,
           ),

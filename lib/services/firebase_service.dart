@@ -1,93 +1,54 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+
 import 'package:limmat/models/water_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseService {
   //final FirebaseFirestore _db = FirebaseFirestore.instance;
-  WaterData? _cachedData;
-  DateTime? _lastUpdate;
-  ForecastedWaterData? _cachedForecastData;
-  DateTime? _lastForecastUpdate;
   // current water data
   Future<void> saveData(WaterData data) async {
-    /*   await _db.collection('waterData').doc('latest').set({
-      ...data.toJson(),
-      'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-*/
+    final prefs = await SharedPreferences.getInstance();
     // Update local cache
-    _cachedData = data;
-    _lastUpdate = DateTime.now();
+    await prefs.setString('cachedData', jsonEncode(data.toJson()));
+    await prefs.setString('lastUpdate', DateTime.now().toIso8601String());
   }
 
   Future<WaterData?> loadData() async {
     final now = DateTime.now();
     final thirtyMinutesAgo = now.subtract(const Duration(minutes: 30));
+    final prefs = await SharedPreferences.getInstance();
+    final cachedData = prefs.getString('cachedData');
+    final lastUpdate = prefs.getString('lastUpdate');
     // Check local cache first
-    if (_cachedData != null &&
-        _lastUpdate != null &&
-        _lastUpdate!.isAfter(thirtyMinutesAgo)) {
-      return _cachedData;
+    if (cachedData != null &&
+        lastUpdate != null &&
+        DateTime.parse(lastUpdate).isAfter(thirtyMinutesAgo)) {
+      return WaterData.fromJson(jsonDecode(cachedData));
     }
-/*     DocumentSnapshot snapshot =
-        await _db.collection('waterData').doc('latest').get();
-    if (snapshot.exists) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-      final updateDate = data['updatedAt'].toDate();
-      if (updateDate.isAfter(thirtyMinutesAgo)) {
-        data.remove('updatedAt');
-        _cachedData = WaterData.fromJson(data);
-        _lastUpdate = updateDate;
-        return _cachedData;
-      }
-    } */
     return null;
   }
 
   // forecasted water data
   Future<void> saveForecastData(ForecastedWaterData data) async {
-    /*     await _db.collection('forecastedWaterData').doc('latest').set(
-      {
-        ...data.toJson(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      },
-    );
-*/
+    final prefs = await SharedPreferences.getInstance();
     // Update local cache
-    _cachedForecastData = data;
-    _lastForecastUpdate = DateTime.now();
+    await prefs.setString('cachedForecastData', jsonEncode(data.toJson()));
+    await prefs.setString(
+        'lastForecastUpdate', DateTime.now().toIso8601String());
   }
 
   Future<ForecastedWaterData?> loadForecastData() async {
     final now = DateTime.now();
     final thirtyMinutesAgo = now.subtract(const Duration(minutes: 30));
+    final prefs = await SharedPreferences.getInstance();
+    final cachedData = prefs.getString('cachedForecastData');
+    final lastUpdate = prefs.getString('lastForecastUpdate');
     // Check local cache first
-    if (_cachedForecastData != null &&
-        _lastForecastUpdate != null &&
-        _lastForecastUpdate!.isAfter(thirtyMinutesAgo)) {
-      return _cachedForecastData!;
+    if (cachedData != null &&
+        lastUpdate != null &&
+        DateTime.parse(lastUpdate).isAfter(thirtyMinutesAgo)) {
+      return ForecastedWaterData.fromJson(jsonDecode(cachedData));
     }
-    /* DocumentSnapshot snapshot =
-        await _db.collection('forecastedWaterData').doc('latest').get();
-    if (snapshot.exists) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-      final updateDate = data['updatedAt'].toDate();
-      if (updateDate.isAfter(thirtyMinutesAgo)) {
-        data.remove('updatedAt');
-        Map<String, WaterData> forecastData = {};
-
-        data.forEach((key, value) {
-          forecastData[key] = WaterData.fromJson(value);
-        });
-
-        // Sort the forecastData map based on the keys
-        final sortedForecastData = Map.fromEntries(forecastData.entries.toList()
-          ..sort((a, b) => a.key.compareTo(b.key)));
-        _cachedForecastData =
-            ForecastedWaterData(forecastData: sortedForecastData);
-        _lastForecastUpdate = updateDate;
-        return _cachedForecastData!;
-      }
-    } */
     return null;
   }
 }

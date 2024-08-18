@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:limmat/models/water_data.dart';
 import '../services/api_service.dart';
 import '../services/firebase_service.dart';
@@ -20,8 +19,10 @@ class _WaterDataDisplayState extends State<WaterDataDisplay> {
 
   @override
   void initState() {
-    super.initState();
-    loadData();
+    if (mounted) {
+      super.initState();
+      loadData();
+    }
   }
 
   Future<void> fetchData() async {
@@ -30,7 +31,7 @@ class _WaterDataDisplayState extends State<WaterDataDisplay> {
       waterData = data;
     });
 
-    await _firestoreService.saveData(data);
+    _firestoreService.saveData(data);
   }
 
   Future<void> loadData() async {
@@ -75,7 +76,7 @@ class _WaterDataDisplayState extends State<WaterDataDisplay> {
                     children: [
                         WaterDataItem(
                             icon: weatherIcons[waterData!.weatherCode]!,
-                            value: waterData!.outsideTemperature?.toString() ??
+                            value: waterData!.outsideTemperature.toString() ??
                                 'N/A',
                             unit: '°C'),
                         ...waterData!.toJson().entries.map((entry) {
@@ -106,7 +107,7 @@ class _WaterDataDisplayState extends State<WaterDataDisplay> {
                               icon: icon,
                               value: entry.value.toString(),
                               unit: unit);
-                        }).toList(),
+                        }),
                       ]),
           ),
         ),

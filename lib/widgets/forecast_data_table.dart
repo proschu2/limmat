@@ -6,7 +6,7 @@ import 'dart:math';
 class ForecastDataTable extends StatelessWidget {
   final Map<String, WaterData> forecastData;
 
-  ForecastDataTable({required this.forecastData});
+  ForecastDataTable({super.key, required this.forecastData});
 
   final List<IconData> weatherIcons = [
     Icons.wb_sunny,
@@ -59,8 +59,8 @@ class ForecastDataTable extends StatelessWidget {
           rows: forecastData.entries.map((entry) {
             final dayMonth = outputFormat.format(inputFormat
                 .parse(entry.key)); // Extract day and month in dd.mm format
-            final speed = entry.value.waterSpeed?.toString() ?? 'N/A';
-            final height = entry.value.waterHeight?.toString() ?? 'N/A';
+            final speed = entry.value.waterSpeed.toString() ?? 'N/A';
+            final height = entry.value.waterHeight.toString() ?? 'N/A';
             final weatherIcon = entry.value.weatherIcon;
 
             return DataRow(cells: [

@@ -3,6 +3,8 @@ import 'water_data_display.dart';
 import 'forecast_data_display.dart';
 
 class MainView extends StatelessWidget {
+  const MainView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
