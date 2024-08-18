@@ -227,6 +227,8 @@ const manageFirestoreData = async (collection: string) => {
       const updatedAt = docData.updatedAt ? docData.updatedAt.toDate() : null;
       if (updatedAt && updatedAt > thirtyMinutesAgo) {
         logger.info("Data is up to date, skipping Firestore update");
+        // we need to remove the updatedAt field from the response
+        delete docData.updatedAt;
         return docData;
       }
     }
