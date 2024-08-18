@@ -31,7 +31,7 @@ jobs:
       - name: Build web
         env:
           RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
-        run: flutter build web --dart-define=RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }}
+        run: flutter build web --dart-define=RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} --release --web-renderer html
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0.9.0
