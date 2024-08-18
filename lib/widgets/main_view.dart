@@ -48,9 +48,9 @@ class MainView extends StatelessWidget {
                       Colors.white, // Color of the unselected tabs
                 ),
               ),
-              body: TabBarView(
+              body: const TabBarView(
                 children: [
-                  const WaterDataDisplay(),
+                  WaterDataDisplay(),
                   ForecastView(),
                 ],
               ),

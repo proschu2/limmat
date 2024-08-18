@@ -1,19 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:limmat/models/water_data.dart';
 
 class FirebaseService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  //final FirebaseFirestore _db = FirebaseFirestore.instance;
   WaterData? _cachedData;
   DateTime? _lastUpdate;
   ForecastedWaterData? _cachedForecastData;
   DateTime? _lastForecastUpdate;
   // current water data
   Future<void> saveData(WaterData data) async {
-    await _db.collection('waterData').doc('latest').set({
+    /*   await _db.collection('waterData').doc('latest').set({
       ...data.toJson(),
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
-
+*/
     // Update local cache
     _cachedData = data;
     _lastUpdate = DateTime.now();
@@ -28,7 +28,7 @@ class FirebaseService {
         _lastUpdate!.isAfter(thirtyMinutesAgo)) {
       return _cachedData;
     }
-    DocumentSnapshot snapshot =
+/*     DocumentSnapshot snapshot =
         await _db.collection('waterData').doc('latest').get();
     if (snapshot.exists) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -39,19 +39,19 @@ class FirebaseService {
         _lastUpdate = updateDate;
         return _cachedData;
       }
-    }
+    } */
     return null;
   }
 
   // forecasted water data
   Future<void> saveForecastData(ForecastedWaterData data) async {
-    await _db.collection('forecastedWaterData').doc('latest').set(
+    /*     await _db.collection('forecastedWaterData').doc('latest').set(
       {
         ...data.toJson(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
     );
-
+*/
     // Update local cache
     _cachedForecastData = data;
     _lastForecastUpdate = DateTime.now();
@@ -66,7 +66,7 @@ class FirebaseService {
         _lastForecastUpdate!.isAfter(thirtyMinutesAgo)) {
       return _cachedForecastData!;
     }
-    DocumentSnapshot snapshot =
+    /* DocumentSnapshot snapshot =
         await _db.collection('forecastedWaterData').doc('latest').get();
     if (snapshot.exists) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -87,7 +87,7 @@ class FirebaseService {
         _lastForecastUpdate = updateDate;
         return _cachedForecastData!;
       }
-    }
+    } */
     return null;
   }
 }

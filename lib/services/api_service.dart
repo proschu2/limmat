@@ -31,7 +31,9 @@ class ApiService {
     'weatherForecast': {
       'url': weatherForecastUrl,
       'function': 'weatherForecastRequest'
-    }
+    },
+    'getWaterData': {'url': '', 'function': 'getWaterData'},
+    'getForecastedWaterData': {'url': '', 'function': 'getForecastedWaterData'},
   };
 
   Future<dynamic> fetchUrl(String url) async {
@@ -110,6 +112,14 @@ class ApiService {
   }
 
   Future<WaterData> fetchWaterData() async {
+    if (kIsWeb) {
+      final result = await functions
+          .httpsCallable(
+            neededUrls['getWaterData']!['function']!,
+          )
+          .call();
+      return WaterData.fromJson(result.data);
+    }
     final waterStatus = await fetchWaterStatus();
     final waterTemperature = await fetchWaterTemperature();
 
@@ -158,6 +168,14 @@ class ApiService {
   }
 
   Future<ForecastedWaterData> fetchForecastedWaterData() async {
+    if (kIsWeb) {
+      final result = await functions
+          .httpsCallable(
+            neededUrls['getForecastedWaterData']!['function']!,
+          )
+          .call();
+      return ForecastedWaterData.fromJson(result.data);
+    }
     final waterHeight = await fetchWaterHeight();
     final waterSpeed = await fetchWaterSpeed();
     final double waterTemperature = await fetchWaterTemperature();
