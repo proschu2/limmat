@@ -229,7 +229,14 @@ const manageFirestoreData = async (collection: string) => {
         logger.info("Data is up to date, skipping Firestore update");
         // we need to remove the updatedAt field from the response
         delete docData.updatedAt;
-        return docData;
+        // order the keys
+        const orderedData: { [key: string]: any } = {};
+        Object.keys(docData)
+          .sort()
+          .forEach((key) => {
+            orderedData[key] = docData[key];
+          });
+        return orderedData;
       }
     }
   }

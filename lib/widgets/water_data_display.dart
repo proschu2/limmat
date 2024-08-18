@@ -64,99 +64,83 @@ class _WaterDataDisplayState extends State<WaterDataDisplay> {
       ),
       Scaffold(
         backgroundColor: Colors.transparent,
-        body: RefreshIndicator(
-          onRefresh: loadData,
-          child: ListView(children: [
-            Center(
-              child: waterData == null
-                  ? const CircularProgressIndicator()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                          Padding(
-                              padding: const EdgeInsets.all(64.0),
-                              child: IntrinsicWidth(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(weatherIcons[waterData!.weatherCode],
-                                      size: 48, color: Colors.white),
-                                  const SizedBox(width: 32),
-                                  Flexible(
-                                      child: Text(
-                                    waterData!.outsideTemperature?.toString() ??
-                                        'N/A',
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  )),
-                                  const SizedBox(width: 12),
-                                  Text('°C',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium),
-                                ],
-                              ))),
-                          ...waterData!.toJson().entries.map((entry) {
-                            if (['weatherCode', 'outsideTemperature']
-                                .contains(entry.key)) {
-                              return Container();
-                            }
-                            IconData icon;
-                            String unit;
-                            switch (entry.key) {
-                              case 'waterTemperature':
-                                icon = Icons.thermostat;
-                                unit = '°C';
-                                break;
-                              case 'waterSpeed':
-                                icon = Icons.speed;
-                                unit = 'm³/s';
-                                break;
-                              case 'waterHeight':
-                                icon = Icons.water;
-                                unit = 'm';
-                                break;
-                              default:
-                                icon = Icons.help;
-                                unit = '';
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.all(64.0),
-                              child: IntrinsicWidth(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment
-                                    .center, // Ensure vertical alignment
-
-                                children: [
-                                  Icon(
-                                    icon,
-                                    size: 64,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(width: 32),
-                                  Flexible(
-                                      child: Text(
-                                    entry.value.toString(),
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  )),
-                                  const SizedBox(width: 12),
-                                  Text(unit,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium),
-                                ],
-                              )),
-                            );
-                          }).toList(),
-                        ]),
-            ),
-          ]),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: waterData == null
+                ? const CircularProgressIndicator()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                        WaterDataItem(
+                            icon: weatherIcons[waterData!.weatherCode]!,
+                            value: waterData!.outsideTemperature?.toString() ??
+                                'N/A',
+                            unit: '°C'),
+                        ...waterData!.toJson().entries.map((entry) {
+                          if (['weatherCode', 'outsideTemperature']
+                              .contains(entry.key)) {
+                            return const SizedBox.shrink();
+                          }
+                          IconData icon;
+                          String unit;
+                          switch (entry.key) {
+                            case 'waterTemperature':
+                              icon = Icons.thermostat;
+                              unit = '°C';
+                              break;
+                            case 'waterSpeed':
+                              icon = Icons.speed;
+                              unit = 'm³/s';
+                              break;
+                            case 'waterHeight':
+                              icon = Icons.water;
+                              unit = 'm';
+                              break;
+                            default:
+                              icon = Icons.help;
+                              unit = '';
+                          }
+                          return WaterDataItem(
+                              icon: icon,
+                              value: entry.value.toString(),
+                              unit: unit);
+                        }).toList(),
+                      ]),
+          ),
         ),
       ),
     ]));
+  }
+}
+
+class WaterDataItem extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String unit;
+
+  const WaterDataItem(
+      {required this.icon, required this.value, required this.unit, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(icon, size: 32, color: Colors.white),
+        const SizedBox(width: 24),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(width: 12),
+        Text(
+          unit,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ],
+    );
   }
 }

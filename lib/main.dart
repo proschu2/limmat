@@ -56,10 +56,10 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(
-              color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
           bodyMedium: TextStyle(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 16,
             fontWeight: FontWeight.normal,
           ),
           headlineSmall: TextStyle(
