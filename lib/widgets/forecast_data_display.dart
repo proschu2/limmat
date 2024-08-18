@@ -26,7 +26,7 @@ class _ForecastViewState extends State<ForecastView> {
 
   Future<void> fetchData() async {
     ForecastedWaterData data = await apiService.fetchForecastedWaterData();
-    
+
     setState(() {
       forecastedWaterData = data;
     });
@@ -50,34 +50,33 @@ class _ForecastViewState extends State<ForecastView> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.transparent,
-        body: RefreshIndicator(
-            onRefresh: loadData,
-            child: ListView(children: [
-              Center(
+        body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
                 child: forecastedWaterData == null
                     ? const CircularProgressIndicator()
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Center(
-                              child: Container(
-                            height: 300,
-                            child: ForecastLineChart(
-                                forecastData:
-                                    forecastedWaterData!.forecastData),
-                          )),
-                          const SizedBox(height: 20),
-                          Center(
-                              child: Container(
-                            height: 350,
-                            child: ForecastDataTable(
-                                forecastData:
-                                    forecastedWaterData!.forecastData),
-                          )),
-                        ],
-                      ),
-              )
-            ])));
+                    : SingleChildScrollView(
+                        child: Column(
+                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Center(
+                                child: Container(
+                              height: 300,
+                              child: ForecastLineChart(
+                                  forecastData:
+                                      forecastedWaterData!.forecastData),
+                            )),
+                            const SizedBox(height: 20),
+                            Center(
+                                child: Container(
+                              height: 350,
+                              child: ForecastDataTable(
+                                  forecastData:
+                                      forecastedWaterData!.forecastData),
+                            )),
+                          ],
+                        ),
+                      ))));
   }
 }
