@@ -65,7 +65,7 @@ export const ForecastChart = ({ forecast, weather, lang }: Props) => {
     day: fmtWeekday(lang, d.date),
     speed: d.waterSpeed,
     height: d.waterHeight,
-    weather: weather.daily[d.date], // may be undefined for days beyond forecast range
+    weather: weather.daily[d.date]?.code, // WMO code, may be undefined beyond forecast range
   }));
   const codes = data.map((d) => d.weather);
 

@@ -21,10 +21,16 @@ export interface Forecast {
 }
 
 // Weather from open-meteo (fetched browser-side; CORS-allowed).
+export interface DailyWeather {
+  code: number; // WMO weather code
+  tempMax: number; // day high, °C
+  tempMin: number; // day low, °C
+}
+
 export interface Weather {
   currentTemperature: number; // °C
   currentWeatherCode: number; // WMO
-  /** Daily forecast: date YYYY-MM-DD → WMO code. */
-  daily: Record<string, number>;
+  /** Daily forecast: date YYYY-MM-DD → weather + high/low air temp. */
+  daily: Record<string, DailyWeather>;
   updatedAt: string;
 }

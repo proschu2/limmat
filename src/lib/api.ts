@@ -1,7 +1,7 @@
 // API client: river data via Worker (/api/*), weather direct from open-meteo.
 // 30-min client cache to avoid hammering endpoints on every navigation.
 
-import type { CurrentConditions, Forecast, Weather } from "./types";
+import type { CurrentConditions, Forecast, Weather, DailyWeather } from "./types";
 
 const CACHE_MS = 30 * 60 * 1000;
 
@@ -47,16 +47,25 @@ export const fetchForecast = (): Promise<Forecast> =>
   get("lbg:forecast", "/api/forecast");
 
 const WEATHER_URL =
-  "https://api.open-meteo.com/v1/forecast?latitude=47.392574&longitude=8.520825&current=temperature_2m,weather_code&daily=weather_code&timezone=Europe%2FZurich&forecast_days=7";
+  "https://api.open-meteo.com/v1/forecast?latitude=47.392574&longitude=8.520825&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FZurich&forecast_days=7";
 
 export const fetchWeather = async (): Promise<Weather> => {
-  const raw = await get<{ current: { temperature_2m: number; weather_code: number }; daily: { time: string[]; weather_code: number[] } }>(
-    "lbg:weather",
-    WEATHER_URL,
-  );
-  const daily: Record<string, number> = {};
+  const raw = await get<{
+    current: { temperature_2m: number; weather_code: number };
+    daily: {
+      time: string[];
+      weather_code: number[];
+      temperature_2m_max: number[];
+      temperature_2m_min: number[];
+    };
+  }>("lbg:weather2", WEATHER_URL); // bumped cache key: new daily shape
+  const daily: Record<string, DailyWeather> = {};
   raw.daily.time.forEach((d, i) => {
-    daily[d] = raw.daily.weather_code[i];
+    daily[d] = {
+      code: raw.daily.weather_code[i],
+      tempMax: raw.daily.temperature_2m_max[i],
+      tempMin: raw.daily.temperature_2m_min[i],
+    };
   });
   return {
     currentTemperature: raw.current.temperature_2m,
@@ -71,4 +80,5 @@ export const clearCache = (): void => {
   localStorage.removeItem("lbg:current");
   localStorage.removeItem("lbg:forecast");
   localStorage.removeItem("lbg:weather");
+  localStorage.removeItem("lbg:weather2");
 };

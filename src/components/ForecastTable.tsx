@@ -26,12 +26,14 @@ export const ForecastTable = ({ forecast, weather, lang }: Props) => (
           <th>{t(lang, "day")}</th>
           <th className="num">{t(lang, "speed")}</th>
           <th className="num">{t(lang, "height")}</th>
+          <th className="num">{t(lang, "airTemp")}</th>
           <th> </th>
         </tr>
       </thead>
       <tbody>
         {forecast.days.map((d) => {
-          const wCode = weather.daily[d.date];
+          const dw = weather.daily[d.date];
+          const wCode = dw?.code;
           const wInfo = wCode !== undefined ? weatherInfo(wCode) : null;
           const grade = dayGrade(d.waterHeight, d.waterSpeed, wCode);
           return (
@@ -58,6 +60,9 @@ export const ForecastTable = ({ forecast, weather, lang }: Props) => (
                 style={{ color: `var(--${heightSafety(d.waterHeight)})` }}
               >
                 {fmtSigned(lang, d.waterHeight, 2)}
+              </td>
+              <td className="num">
+                {dw ? `${fmtNumber(lang, dw.tempMax, 0)}°` : "–"}
               </td>
               <td>
                 {wInfo ? (
