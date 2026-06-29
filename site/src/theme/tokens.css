@@ -1,0 +1,72 @@
+:root {
+  /* ===== Light mode (default) — from docs/DESIGN_BRIEF.md ===== */
+  --bg: #f0f7fa;
+  --bg-accent: rgba(0, 119, 182, 0.1); /* top fade */
+  --card: #ffffff;
+  --text: #0d2137;
+  --text-secondary: #5a6b7e;
+  --divider: #dce5ed;
+  --water: #0077b6;
+  --water-light: #90e0ef;
+
+  /* Safety states — tuned for AA on light cards */
+  --safe: #1e7d3a;
+  --caution: #b85200;
+  --danger: #b81a1a;
+  --safe-bg: rgba(30, 125, 58, 0.12);
+  --caution-bg: rgba(184, 82, 0, 0.12);
+  --danger-bg: rgba(184, 26, 26, 0.12);
+
+  /* Chart line colors */
+  --speed-line: #00b4d8;
+  --height-line: #f59e0b;
+
+  /* Badge text + inactive tab — per-theme for WCAG AA on the safety fills */
+  --badge-text: #ffffff; /* white on dark safety colors (light mode) */
+  --tab-inactive: #3a4c60; /* 6.9:1 on --divider */
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0a1628;
+  --bg-accent: rgba(72, 202, 228, 0.08);
+  --card: #14233a;
+  --text: #e8eff6;
+  --text-secondary: #8b9db0;
+  --divider: #2a3d55;
+  --water: #48cae4;
+  --water-light: #0077b6;
+
+  --safe: #4ade80;
+  --caution: #fbbf24;
+  --danger: #fb7171;
+  --safe-bg: rgba(74, 222, 128, 0.16);
+  --caution-bg: rgba(251, 191, 36, 0.16);
+  --danger-bg: rgba(251, 113, 113, 0.16);
+
+  --speed-line: #48cae4;
+  --height-line: #f59e0b;
+
+  /* Dark text on the bright safety colors (dark mode) — all pass AA */
+  --badge-text: #0a1628;
+  --tab-inactive: #a8bccf; /* 5.7:1 on --divider */
+
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    interpolation-colors: oklab;
+  }
+  * {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+}

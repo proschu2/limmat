@@ -1,0 +1,29 @@
+{
+  "name": "limmat-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev -- vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "wrangler pages dev dist",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p functions/tsconfig.json"
+  },
+  "dependencies": {
+    "lucide-react": "^1.22.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-is": "^19.2.7",
+    "recharts": "^3.9.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260629.1",
+    "@types/node": "^26.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.0",
+    "wrangler": "^4.105.0"
+  }
+}
