@@ -1,5 +1,5 @@
 // Data types — single source of truth for the API output shape.
-// Mirrors docs/DATA_SPEC.md and site/src/lib/types.ts.
+// Mirrors docs/DATA_SPEC.md and src/lib/types.ts.
 
 /** Live/current conditions for station 2099 (+ temp from 2243). */
 export interface CurrentConditions {

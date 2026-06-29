@@ -113,8 +113,8 @@ The app is structurally sound but has 4 WCAG AA failures (badge contrast in dark
 ## Sources
 
 - **Kept: audit.json** (/home/gibberish711/dev/limmat/.ux-shots/audit.json) — Measured data from real rendered page at 390px viewport. All contrast ratios, geometry, and a11y tree data come from this file.
-- **Kept: styles.css** (/home/gibberish711/dev/limmat/site/src/styles.css) — Current styling implementation; referenced for padding, font, and layout values.
-- **Kept: tokens.css** (/home/gibberish711/dev/limmat/site/src/theme/tokens.css) — Design token values; referenced for all color comparisons.
+- **Kept: styles.css** (/home/gibberish711/dev/limmat/src/styles.css) — Current styling implementation; referenced for padding, font, and layout values.
+- **Kept: tokens.css** (/home/gibberish711/dev/limmat/src/theme/tokens.css) — Design token values; referenced for all color comparisons.
 - **Kept: SafetyBadge.tsx** — Badge component source; confirms no metric-specific reason is shown.
 - **Kept: ForecastTable.tsx** — Confirms color-only safety encoding in table cells.
 - **Kept: App.tsx** — Main layout; confirms flat heading structure and modal implementation.
