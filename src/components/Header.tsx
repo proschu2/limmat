@@ -9,9 +9,7 @@ export const Header = ({ settings }: Props) => {
   return (
     <header className="header">
       <div>
-        <h1 className="header__title">
-          {lang === "de" ? "Limmat Böötle" : "Limmat Böötle"}
-        </h1>
+        <h1 className="header__title">Limmat Böötle Guide</h1>
         <p className="header__subtitle">
           {lang === "de" ? "Soll ich heute böötle?" : "Should I float today?"}
         </p>
