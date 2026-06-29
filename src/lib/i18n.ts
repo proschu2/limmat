@@ -19,7 +19,7 @@ export const STRINGS = {
     speedUnit: "m³/s",
     heightUnit: "Δm",
     tempUnit: "°C",
-    forecast: "7-day forecast",
+    forecast: "{n}-day forecast",
     chart: "Chart",
     table: "Table",
     day: "Day",
@@ -61,7 +61,7 @@ export const STRINGS = {
     speedUnit: "m³/s",
     heightUnit: "Δm",
     tempUnit: "°C",
-    forecast: "7-Tage-Prognose",
+    forecast: "{n}-Tage-Prognose",
     chart: "Diagramm",
     table: "Tabelle",
     day: "Tag",
@@ -91,3 +91,7 @@ export const STRINGS = {
 export type StringKey = keyof (typeof STRINGS)["en"];
 
 export const t = (lang: Lang, key: StringKey): string => STRINGS[lang][key];
+
+/** Templated lookup: replaces {placeholders} in the string. */
+export const tf = (lang: Lang, key: StringKey, vars: Record<string, string | number>): string =>
+  STRINGS[lang][key].replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? `{${k}}`));

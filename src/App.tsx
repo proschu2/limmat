@@ -8,7 +8,7 @@ import { ForecastTable } from "./components/ForecastTable";
 import { fetchCurrent, fetchForecast, fetchWeather, clearCache } from "./lib/api";
 import { worst, heightSafety, speedSafety, weatherSafety, causesAtLevel } from "./lib/safety";
 import { fmtRelative } from "./lib/format";
-import { t } from "./lib/i18n";
+import { t, tf } from "./lib/i18n";
 import type { CurrentConditions, Forecast, Weather } from "./lib/types";
 import "./styles.css";
 
@@ -76,6 +76,10 @@ export default function App() {
             .join(" · ")
       : undefined;
 
+  // Forecast title reflects the actual day count (BAFU publishes a 6-day
+  // horizon; the label derives from the data so it's never wrong).
+  const forecastLabel = tf(lang, "forecast", { n: forecast?.days.length ?? 6 });
+
   const updatedAt = current?.updatedAt ?? weather?.updatedAt;
 
   return (
@@ -110,9 +114,9 @@ export default function App() {
             <ConditionsGrid current={current} weather={weather} lang={lang} />
           </section>
 
-          <section aria-label={t(lang, "forecast")}>
+          <section aria-label={forecastLabel}>
             <div className="section-head">
-              <h2 className="section-head__title">{t(lang, "forecast")}</h2>
+              <h2 className="section-head__title">{forecastLabel}</h2>
               {updatedAt && (
                 <span className="updated">
                   {t(lang, "updatedAt")} {fmtRelative(lang, updatedAt)}
