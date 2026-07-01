@@ -3,6 +3,7 @@ import { useSettings } from "./lib/useSettings";
 import { Header } from "./components/Header";
 import { SafetyBadge } from "./components/SafetyBadge";
 import { ConditionsGrid } from "./components/ConditionsGrid";
+import { FloatingBuoy } from "./components/FloatingBuoy";
 import { ForecastChart } from "./components/ForecastChart";
 import { ForecastTable } from "./components/ForecastTable";
 import { fetchCurrent, fetchForecast, fetchWeather, clearCache } from "./lib/api";
@@ -83,7 +84,9 @@ export default function App() {
   const updatedAt = current?.updatedAt ?? weather?.updatedAt;
 
   return (
-    <div className="app">
+    <>
+      <FloatingBuoy />
+      <div className="app">
       <Header settings={settings} />
 
       {error && !current ? (
@@ -180,6 +183,7 @@ export default function App() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

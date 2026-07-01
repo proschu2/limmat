@@ -1,13 +1,11 @@
 name = "lbg"
+pages_build_output_dir = "dist"
 compatibility_date = "2024-09-25"
 
 # Local dev: `bun run dev` → `wrangler pages dev -- vite`
 #   Vite serves the UI (with HMR); pages dev adds the /api/* Functions.
-#   No output dir here, so the proxy-command dev mode works.
-#
-# Production deploy output dir is set in the Cloudflare Pages dashboard
-# (build command `bun install && bun run build`, output directory `dist`),
-# OR via `wrangler pages deploy dist`. See PLAN.md §4.5.
+# Deploy: `bun install && bun run build && wrangler pages deploy`
+#   (pages_build_output_dir above tells wrangler to upload dist/)
 
 [observability]
 enabled = true

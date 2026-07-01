@@ -26,7 +26,7 @@ export const ForecastTable = ({ forecast, weather, lang }: Props) => (
           <th>{t(lang, "day")}</th>
           <th className="num">{t(lang, "speed")}</th>
           <th className="num">{t(lang, "height")}</th>
-          <th className="num">{t(lang, "airTemp")}</th>
+          <th className="num">{t(lang, "airCol")}</th>
           <th> </th>
         </tr>
       </thead>

@@ -47,6 +47,8 @@ button {
 }
 
 .app {
+  position: relative;
+  z-index: 1; /* sit above the decorative .bg-buoys layer (z-index: 0) */
   max-width: 640px;
   margin: 0 auto;
   padding: 16px;
@@ -404,5 +406,57 @@ h2.section-head__title {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* ============================================================
+   Decorative drifting floats (.bg-buoys)
+   ============================================================ */
+.bg-buoys {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.buoy {
+  position: absolute;
+  left: 0;
+  display: block;
+  /* default lane vars (overridden per-buoy via inline custom props) */
+  --end-top: 50%;
+  --dy: 0px;
+  --spin: 0deg;
+  --rest-x: 0vw;
+  /* resting position used when motion is reduced (animation disabled) */
+  transform: translateX(var(--rest-x));
+  animation-name: buoy-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.buoy__tilt {
+  display: block;
+}
+
+@keyframes buoy-drift {
+  /* Diagonal drift: the vertical offset (entry→exit lane) is folded into the
+     transform as a %of-screen translateY, so it stays GPU-composited (animating
+     `top` would trigger layout every frame). --dy is the lane delta in %.
+     A small ±7px bob at the quarter points reads as floating on the surface.
+     Rotation spins from 0 to --spin across the crossing. */
+  0%   { transform: translateX(-24vw) translateY(0)    rotate(0deg); }
+  25%  { transform: translateX(8vw)   translateY(-7px) rotate(calc(var(--spin) * 0.25)); }
+  50%  { transform: translateX(40vw)  translateY(0)    rotate(calc(var(--spin) * 0.5)); }
+  75%  { transform: translateX(72vw)  translateY(-7px) rotate(calc(var(--spin) * 0.75)); }
+  100% { transform: translateX(122vw) translateY(var(--dy)) rotate(var(--spin)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .buoy {
+    animation: none !important;
+    /* falls back to the base translateX(var(--rest-x)) — static scatter */
   }
 }
