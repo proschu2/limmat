@@ -32,7 +32,7 @@ const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 interface BuoySpec {
   color: string;
   top: number; // %, entry lane
-  dy: number; // px, vertical delta to exit lane (diagonal drift)
+  dy: number; // vh, continuous vertical delta across the crossing (~travel angle)
   size: number; // px
   rot: number; // deg, static tilt
   spin: number; // deg, total in-flight rotation across the crossing
@@ -49,9 +49,9 @@ const makeSpec = (): BuoySpec => {
   return {
     color: pick(COLORS),
     top,
-    // subtle diagonal: drift up/down a few % of screen height over the full
-    // width. ~1% ≈ 8px on a typical phone, so ±6% ≈ ±48px (floats, not falls).
-    dy: rnd(-48, 48),
+    // Continuous diagonal: drift up/down across the full crossing. ±28vh ≈ a
+    // ±17° travel angle on a phone (clearly diagonal, not strictly L→R).
+    dy: rnd(-28, 28),
     size: rnd(28, 64),
     rot: rnd(-18, 18),
     spin: rnd(-24, 24),
@@ -69,7 +69,7 @@ const apply = (el: HTMLElement, s: BuoySpec) => {
   el.style.opacity = String(s.opacity);
   el.style.animationDuration = `${s.dur}s`;
   el.style.animationDelay = `${s.delay}s`;
-  el.style.setProperty("--dy", `${s.dy}px`);
+  el.style.setProperty("--dy", `${s.dy}vh`);
   el.style.setProperty("--spin", `${s.spin}deg`);
   const tilt = el.firstElementChild as HTMLElement;
   if (tilt) tilt.style.transform = `rotate(${s.rot}deg)`;
@@ -116,7 +116,7 @@ export const FloatingBuoy = () => {
             color: s.color,
             animationDuration: `${s.dur}s`,
             animationDelay: `${s.delay}s`,
-            ["--dy" as string]: `${s.dy}px`,
+            ["--dy" as string]: `${s.dy}vh`,
             ["--spin" as string]: `${s.spin}deg`,
             ["--rest-x" as string]: `${s.restX}vw`,
           }}

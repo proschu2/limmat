@@ -426,7 +426,7 @@ h2.section-head__title {
   display: block;
   /* default lane vars (overridden per-buoy via inline custom props) */
   --end-top: 50%;
-  --dy: 0px;
+  --dy: 0vh;
   --spin: 0deg;
   --rest-x: 0vw;
   /* resting position used when motion is reduced (animation disabled) */
@@ -442,16 +442,16 @@ h2.section-head__title {
 }
 
 @keyframes buoy-drift {
-  /* Diagonal drift: the vertical offset (entry→exit lane) is folded into the
-     transform as a %of-screen translateY, so it stays GPU-composited (animating
-     `top` would trigger layout every frame). --dy is the lane delta in %.
-     A small ±7px bob at the quarter points reads as floating on the surface.
-     Rotation spins from 0 to --spin across the crossing. */
-  0%   { transform: translateX(-24vw) translateY(0)    rotate(0deg); }
-  25%  { transform: translateX(8vw)   translateY(-7px) rotate(calc(var(--spin) * 0.25)); }
-  50%  { transform: translateX(40vw)  translateY(0)    rotate(calc(var(--spin) * 0.5)); }
-  75%  { transform: translateX(72vw)  translateY(-7px) rotate(calc(var(--spin) * 0.75)); }
-  100% { transform: translateX(122vw) translateY(var(--dy)) rotate(var(--spin)); }
+  /* Continuous diagonal: translateY progresses monotonically 0 → --dy across
+     the whole crossing (a real travel angle, not a late jump), with a small
+     ±7px bob added on top at the quarter points so it floats rather than
+     glides in a dead-straight line. --dy is in vh so the angle scales with
+     screen height; reshuffled each loop in JS. Rotation: 0 → --spin. */
+  0%   { transform: translateX(-24vw) translateY(0)                              rotate(0deg); }
+  25%  { transform: translateX(8vw)   translateY(calc(var(--dy) * 0.25 - 7px)) rotate(calc(var(--spin) * 0.25)); }
+  50%  { transform: translateX(40vw)  translateY(calc(var(--dy) * 0.5))          rotate(calc(var(--spin) * 0.5)); }
+  75%  { transform: translateX(72vw)  translateY(calc(var(--dy) * 0.75 - 7px)) rotate(calc(var(--spin) * 0.75)); }
+  100% { transform: translateX(122vw) translateY(var(--dy))                      rotate(var(--spin)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
