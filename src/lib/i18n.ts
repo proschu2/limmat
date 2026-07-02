@@ -32,10 +32,15 @@ export const STRINGS = {
     tapHint: "Tap for details",
     criteriaTitle: "How we judge it",
     criteriaHeight:
-      "Level: safe 0.10–0.45 m, caution near 0.45–0.79 m, danger above 0.79 m or below −0.24 m.",
+      "Level — safe: 0.10–0.45 m · caution: 0.45–0.79 m · danger: above 0.79 m or below −0.24 m.",
     criteriaSpeed:
-      "Flow: safe 86–144 m³/s, caution 61–85 or 145–164 m³/s, danger ≤60 or ≥165 m³/s.",
-    criteriaWeather: "Weather: rain/snow/storm = danger, fog = caution.",
+      "Flow — safe: 86–144 m³/s · caution: 61–85 or 145–164 m³/s · danger: ≤60 or ≥165 m³/s.",
+    criteriaWeather: "Weather — danger: rain/snow/storm · caution: fog.",
+    metricsTitle: "What the values mean",
+    metricLevel: "Water level deviation from the reference (can be negative).",
+    metricFlow: "River discharge / flow rate.",
+    metricWater: "Water temperature.",
+    metricAir: "Air temperature (daily high in the forecast).",
     close: "Close",
     // "Why" reasons for the hero badge (causes).
     reasonSafe: "Flow, level & weather all fine",
@@ -75,10 +80,15 @@ export const STRINGS = {
     tapHint: "Tippen für Details",
     criteriaTitle: "So beurteilen wir es",
     criteriaHeight:
-      "Wasserstand: sicher 0.10–0.45 m, Vorsicht 0.45–0.79 m, Gefahr über 0.79 m oder unter −0.24 m.",
+      "Wasserstand — sicher: 0.10–0.45 m · Vorsicht: 0.45–0.79 m · Gefahr: über 0.79 m oder unter −0.24 m.",
     criteriaSpeed:
-      "Strömung: sicher 86–144 m³/s, Vorsicht 61–85 oder 145–164 m³/s, Gefahr ≤60 oder ≥165 m³/s.",
-    criteriaWeather: "Wetter: Regen/Schnee/Gewitter = Gefahr, Nebel = Vorsicht.",
+      "Strömung — sicher: 86–144 m³/s · Vorsicht: 61–85 oder 145–164 m³/s · Gefahr: ≤60 oder ≥165 m³/s.",
+    criteriaWeather: "Wetter — Gefahr: Regen/Schnee/Gewitter · Vorsicht: Nebel.",
+    metricsTitle: "Was die Werte bedeuten",
+    metricLevel: "Abweichung des Wasserstands vom Bezugswert (kann negativ sein).",
+    metricFlow: "Abfluss / Durchflussmenge der Limmat.",
+    metricWater: "Wassertemperatur.",
+    metricAir: "Lufttemperatur (Tageshöchstwert in der Prognose).",
     close: "Schliessen",
     reasonSafe: "Strömung, Wasserstand & Wetter sind in Ordnung",
     heightLow: "Wasserstand zu niedrig",

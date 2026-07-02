@@ -388,6 +388,41 @@ tr:last-child td {
   font-size: 0.875rem;
 }
 
+.modal__subhead {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin: 18px 0 6px;
+}
+
+/* Metric definitions: term + explanation pairs (description list). */
+.metrics {
+  margin: 0 0 4px;
+}
+
+.metrics__row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 5px 0;
+  border-top: 1px solid var(--divider);
+}
+.metrics__row:first-child {
+  border-top: none;
+}
+
+.metrics__row dt {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.metrics__row dd {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
 .footer {
   text-align: center;
   font-size: 0.75rem;

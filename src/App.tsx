@@ -177,6 +177,25 @@ export default function App() {
               <li>{t(lang, "criteriaSpeed")}</li>
               <li>{t(lang, "criteriaWeather")}</li>
             </ul>
+            <h3 className="modal__subhead">{t(lang, "metricsTitle")}</h3>
+            <dl className="metrics">
+              <div className="metrics__row">
+                <dt>{t(lang, "height")}</dt>
+                <dd>{t(lang, "metricLevel")}</dd>
+              </div>
+              <div className="metrics__row">
+                <dt>{t(lang, "speed")}</dt>
+                <dd>{t(lang, "metricFlow")}</dd>
+              </div>
+              <div className="metrics__row">
+                <dt>{t(lang, "waterTemp")}</dt>
+                <dd>{t(lang, "metricWater")}</dd>
+              </div>
+              <div className="metrics__row">
+                <dt>{t(lang, "airTemp")}</dt>
+                <dd>{t(lang, "metricAir")}</dd>
+              </div>
+            </dl>
             <button className="retry-btn" onClick={() => setShowCriteria(false)}>
               {t(lang, "close")}
             </button>
